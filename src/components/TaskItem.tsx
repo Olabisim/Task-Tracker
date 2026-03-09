@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Task } from '../models/types';
+import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
 
 interface TaskItemProps {
   task: Task;
@@ -9,18 +10,24 @@ interface TaskItemProps {
 
 export const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle }) => {
   return (
-    <TouchableOpacity 
-      style={styles.container} 
-      onPress={() => onToggle(task.id)}
-      activeOpacity={0.7}
+    <Animated.View
+      entering={FadeIn.duration(300)}
+      exiting={FadeOut.duration(300)}
+      layout={Layout.springify().damping(14)}
     >
-      <View style={[styles.checkbox, task.completed && styles.checkedBox]}>
-        {task.completed && <Text style={styles.checkmark}>✓</Text>}
-      </View>
-      <Text style={[styles.title, task.completed && styles.titleCompleted]}>
-        {task.title}
-      </Text>
-    </TouchableOpacity>
+      <TouchableOpacity 
+        style={styles.container} 
+        onPress={() => onToggle(task.id)}
+        activeOpacity={0.7}
+      >
+        <View style={[styles.checkbox, task.completed && styles.checkedBox]}>
+          {task.completed && <Text style={styles.checkmark}>✓</Text>}
+        </View>
+        <Text style={[styles.title, task.completed && styles.titleCompleted]}>
+          {task.title}
+        </Text>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 

@@ -4,6 +4,7 @@ import { useTasks } from '../hooks/useTasks';
 import { TaskInput } from '../components/TaskInput';
 import { TaskItem } from '../components/TaskItem';
 import { FilterControls } from '../components/FilterControls';
+import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
 
 export const MainScreen: React.FC = () => {
   const { tasks, filter, setFilter, addTask, toggleTask, loading } = useTasks();
@@ -22,7 +23,9 @@ export const MainScreen: React.FC = () => {
         style={styles.container} 
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <Text style={styles.headerTitle}>Task Tracker</Text>
+        <Animated.View entering={FadeInUp.duration(500).springify()}>
+          <Text style={styles.headerTitle}>Task Tracker</Text>
+        </Animated.View>
         
         <TaskInput onAddTask={addTask} />
         
@@ -38,7 +41,7 @@ export const MainScreen: React.FC = () => {
             </Text>
           </View>
         ) : (
-          <FlatList
+          <Animated.FlatList
             data={tasks}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
@@ -46,6 +49,7 @@ export const MainScreen: React.FC = () => {
             )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
+            itemLayoutAnimation={LinearTransition.springify().damping(14)}
           />
         )}
       </KeyboardAvoidingView>
